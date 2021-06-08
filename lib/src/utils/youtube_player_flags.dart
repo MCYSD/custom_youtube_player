@@ -17,7 +17,7 @@ class YoutubePlayerFlags {
   /// Define whether to auto play the video after initialization or not.
   ///
   /// Default is true.
-  final bool autoPlay;
+  bool autoPlay;
 
   /// Mutes the player initially
   ///
@@ -75,7 +75,7 @@ class YoutubePlayerFlags {
   final bool useHybridComposition;
 
   /// Creates [YoutubePlayerFlags].
-  const YoutubePlayerFlags({
+  YoutubePlayerFlags({
     this.hideControls = false,
     this.controlsVisibleAtStart = false,
     this.autoPlay = true,

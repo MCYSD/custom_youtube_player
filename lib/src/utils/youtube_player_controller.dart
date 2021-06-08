@@ -153,12 +153,12 @@ class YoutubePlayerController extends ValueNotifier<YoutubePlayerValue> {
   final String initialVideoId;
 
   /// Composes all the flags required to control the player.
-  final YoutubePlayerFlags flags;
+  YoutubePlayerFlags flags;
 
   /// Creates [YoutubePlayerController].
   YoutubePlayerController({
     required this.initialVideoId,
-    this.flags = const YoutubePlayerFlags(),
+    required this.flags,
   }) : super(YoutubePlayerValue());
 
   /// Finds [YoutubePlayerController] in the provided context.

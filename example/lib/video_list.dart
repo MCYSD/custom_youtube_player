@@ -22,12 +22,35 @@ class _VideoListState extends State<VideoList> {
       .map<YoutubePlayerController>(
         (videoId) => YoutubePlayerController(
           initialVideoId: videoId,
-          flags: const YoutubePlayerFlags(
+          flags: YoutubePlayerFlags(
             autoPlay: false,
           ),
         ),
       )
       .toList();
+
+  late ScrollController _controller;
+
+  var _itemHeight = 100.0 ;
+
+  int _centeredItems = 1 ;
+
+  late int _numberOfEdgesItems ; // number of items which aren't centered at any moment
+
+  late int _aboveItems ; // number of items above the centered ones
+
+  late int _belowItems ; // number of items below the centered ones
+
+  @override
+  void initState() {
+    _controller = ScrollController(); // Initializing ScrollController
+    _controller.addListener(_scrollListener);
+    super.initState();
+  }
+
+  _scrollListener() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +59,15 @@ class _VideoListState extends State<VideoList> {
         title: const Text('Video List Demo'),
       ),
       body: ListView.separated(
+        controller: _controller,
         itemBuilder: (context, index) {
+          _aboveItems = ( ( (_controller.offset) / (_itemHeight) )).toInt() ;
+
+          _belowItems = _aboveItems + _centeredItems ;
+
+          var isCentered = index >= _aboveItems && index < _belowItems;
+          print("isCentered:$isCentered _controller.offset:${_controller.offset} index: $index _aboveItems:$_aboveItems _belowItems: $_belowItems");
+          _controllers[index].flags.autoPlay = isCentered;
           return YoutubePlayer(
             key: ObjectKey(_controllers[index]),
             controller: _controllers[index],

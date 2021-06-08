@@ -80,7 +80,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _controller = YoutubePlayerController(
       initialVideoId: _ids.first,
-      flags: const YoutubePlayerFlags(
+      flags: YoutubePlayerFlags(
         mute: false,
         autoPlay: true,
         disableDragSeek: false,
