@@ -45,7 +45,7 @@ class YoutubePlayer extends StatefulWidget {
   final Key? key;
 
   /// A [YoutubePlayerController] to control the player.
-  final YoutubePlayerController controller;
+  YoutubePlayerController controller;
 
   /// {@template youtube_player_flutter.width}
   /// Defines the width of the player.
