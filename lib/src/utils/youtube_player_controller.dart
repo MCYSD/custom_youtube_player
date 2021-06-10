@@ -172,6 +172,7 @@ class YoutubePlayerController extends ValueNotifier<YoutubePlayerValue> {
     if (value.isReady) {
       value.webViewController?.evaluateJavascript(source: methodString);
     } else {
+      reload();
       print('The controller is not ready for method calls.');
     }
   }
