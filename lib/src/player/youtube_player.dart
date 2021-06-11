@@ -111,6 +111,8 @@ class YoutubePlayer extends StatefulWidget {
   /// {@endtemplate}
   final List<Widget>? bottomActions;
 
+  final Widget? playPauseAction;
+
   /// {@template youtube_player_flutter.actionsPadding}
   /// Defines padding for [topActions] and [bottomActions].
   ///
@@ -147,6 +149,7 @@ class YoutubePlayer extends StatefulWidget {
     this.liveUIColor = Colors.red,
     this.topActions,
     this.bottomActions,
+    this.playPauseAction,
     this.actionsPadding = const EdgeInsets.all(8.0),
     this.thumbnail,
     this.showVideoProgressIndicator = false,
@@ -399,7 +402,7 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
           ],
           if (!controller.flags.hideControls)
             Center(
-              child: PlayPauseButton(),
+              child: widget.playPauseAction ?? PlayPauseButton(),
             ),
           if (controller.value.hasError) errorWidget,
         ],
