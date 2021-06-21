@@ -173,7 +173,7 @@ class _ProgressBarState extends State<ProgressBar> {
         constraints: const BoxConstraints.expand(height: 1.0 * 2),
         child: CustomPaint(
           painter: _ProgressBarPainter(
-            progressWidth: 2.0,
+            progressWidth: 4.0,
             handleRadius: 1.0,
             playedValue: _playedValue,
             bufferedValue: _bufferedValue,
