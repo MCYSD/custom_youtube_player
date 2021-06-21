@@ -431,7 +431,7 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
           child: PlayPauseButton(),
         )
       ],
-    )
+    );
   }
 
   Widget get _thumbnail => Image.network(
