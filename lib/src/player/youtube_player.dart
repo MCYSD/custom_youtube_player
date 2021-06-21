@@ -113,6 +113,8 @@ class YoutubePlayer extends StatefulWidget {
 
   final Widget? playPauseAction;
 
+  final Widget closeAction;
+
   /// {@template youtube_player_flutter.actionsPadding}
   /// Defines padding for [topActions] and [bottomActions].
   ///
@@ -138,6 +140,7 @@ class YoutubePlayer extends StatefulWidget {
   YoutubePlayer({
     this.key,
     required this.controller,
+    required this.closeAction,
     this.width,
     this.aspectRatio = 16 / 9,
     this.controlsTimeOut = const Duration(seconds: 3),
@@ -412,12 +415,23 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
 
   Widget _buildCustomPlayPause(){
     if (widget.playPauseAction == null){
-      return PlayPauseButton();
+      return _playPauseView();
     }else{
       return AnimatedOpacity(opacity: controller.value.isControlsVisible
           ? 1
           : 0, duration: const Duration(milliseconds: 300), child: widget.playPauseAction,);
     }
+  }
+
+  Widget _playPauseView(){
+    return Stack(
+      children: [
+        Positioned(child: widget.closeAction, top: 13, left: 13,),
+        Center(
+          child: PlayPauseButton(),
+        )
+      ],
+    )
   }
 
   Widget get _thumbnail => Image.network(
