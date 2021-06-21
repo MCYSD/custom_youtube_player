@@ -74,7 +74,8 @@ class _PlayPauseButtonState extends State<PlayPauseButton>
     final _playerState = _controller.value.playerState;
     if ((!_controller.flags.autoPlay && _controller.value.isReady) ||
         _playerState == PlayerState.playing ||
-        _playerState == PlayerState.paused) {
+        _playerState == PlayerState.paused ||
+        _playerState == PlayerState.ended) {
       return Visibility(
         visible: _playerState == PlayerState.cued ||
             !_controller.value.isPlaying ||
@@ -97,6 +98,7 @@ class _PlayPauseButtonState extends State<PlayPauseButton>
       );
     }
     if (_controller.value.hasError) return const SizedBox();
+
     return widget.bufferIndicator ??
         Container(
           width: 70.0,
