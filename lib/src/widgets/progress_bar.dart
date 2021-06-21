@@ -174,7 +174,7 @@ class _ProgressBarState extends State<ProgressBar> {
         child: CustomPaint(
           painter: _ProgressBarPainter(
             progressWidth: 2.0,
-            handleRadius: 7.0,
+            handleRadius: 1.0,
             playedValue: _playedValue,
             bufferedValue: _bufferedValue,
             colors: widget.colors,
