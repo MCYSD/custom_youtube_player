@@ -402,12 +402,22 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
           ],
           if (!controller.flags.hideControls)
             Center(
-              child: widget.playPauseAction ?? PlayPauseButton(),
+              child: _buildCustomPlayPause(),
             ),
           if (controller.value.hasError) errorWidget,
         ],
       ),
     );
+  }
+
+  Widget _buildCustomPlayPause(){
+    if (widget.playPauseAction == null){
+      return PlayPauseButton();
+    }else{
+      return AnimatedOpacity(opacity: controller.value.isControlsVisible
+          ? 1
+          : 0, duration: const Duration(milliseconds: 300), child: widget.playPauseAction,);
+    }
   }
 
   Widget get _thumbnail => Image.network(
