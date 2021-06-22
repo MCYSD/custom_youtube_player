@@ -79,7 +79,7 @@ class _VideoListState extends State<VideoList> {
               const SizedBox(width: 10.0),
               RemainingDuration(),
               FullScreenButton(),
-            ],
+            ], closeAction: Icon(Icons.close),
           );
         },
         itemCount: _controllers.length,

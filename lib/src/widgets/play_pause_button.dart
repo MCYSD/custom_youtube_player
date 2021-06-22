@@ -68,12 +68,12 @@ class _PlayPauseButtonState extends State<PlayPauseButton>
     super.dispose();
   }
 
-  void _playPauseListener(){
-    if (!_controller.value.isPlaying ||  _controller.value.playerState == PlayerState.ended){
+  void _playPauseListener() {
+    if (!_controller.value.isPlaying ||
+        _controller.value.playerState == PlayerState.ended) {
       _animController.reverse();
     } else {
       _animController.forward();
-      widget.forceHideController(true);
     }
   }
 
@@ -92,9 +92,15 @@ class _PlayPauseButtonState extends State<PlayPauseButton>
           color: Colors.transparent,
           child: InkWell(
             borderRadius: BorderRadius.circular(50.0),
-            onTap: () => _controller.value.isPlaying
-                ? _controller.pause()
-                : _controller.play(),
+            onTap: () {
+              if (_controller.value.isPlaying) {
+                _controller.pause();
+                widget.forceHideController(false);
+              } else {
+                _controller.play();
+                widget.forceHideController(false);
+              }
+            },
             child: AnimatedIcon(
               icon: AnimatedIcons.play_pause,
               progress: _animController.view,

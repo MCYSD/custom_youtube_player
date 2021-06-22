@@ -162,7 +162,7 @@ class _MyHomePageState extends State<MyHomePage> {
           _controller
               .load(_ids[(_ids.indexOf(data.videoId) + 1) % _ids.length]);
           _showSnackBar('Next Video Started!');
-        },
+        }, closeAction: Icon(Icons.close),
       ),
       builder: (context, player) => Scaffold(
         appBar: AppBar(
