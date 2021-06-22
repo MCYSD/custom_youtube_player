@@ -73,10 +73,7 @@ class _PlayPauseButtonState extends State<PlayPauseButton>
       _animController.reverse();
     } else {
       _animController.forward();
-
-      var newValue = _controller.value;
-      newValue.isControlsVisible = false;
-      _controller.updateValue(newValue);
+      widget.forceHideController(true);
     }
   }
 

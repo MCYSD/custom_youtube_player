@@ -416,9 +416,10 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
   var forceHideController = false;
 
   Widget _buildCustomPlayPause(){
-    return AnimatedOpacity(opacity: controller.value.isControlsVisible
-        ? 1
-        : 0, duration: const Duration(milliseconds: 300), child: widget.playPauseAction == null ? _playPauseView() : widget.playPauseAction,);
+    return AnimatedOpacity(
+      opacity: controller.value.isControlsVisible ? 1 : 0, duration: const Duration(milliseconds: 300),
+      child: widget.playPauseAction == null ? _playPauseView() : widget.playPauseAction,
+    );
   }
 
   Widget _playPauseView(){
@@ -427,6 +428,9 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
         Positioned(child: widget.closeAction, top: 13, left: 13,),
         Center(
           child: PlayPauseButton(forceHideController: (value) {
+            var newValue = controller.value;
+            newValue.isControlsVisible = false;
+            controller.updateValue(newValue);
           },),
         )
       ],
