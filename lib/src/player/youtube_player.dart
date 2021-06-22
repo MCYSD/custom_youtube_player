@@ -421,13 +421,13 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
         print("AnimatedOpacity onEnd");
         if (onEnd){
           onEnd = false;
+          if (controller.value.isPlaying){
+            print("controller: pause");
+            controller.pause();
+          }
           return;
         }
         onEnd = true;
-        if (controller.value.isPlaying){
-          print("controller: pause");
-          controller.pause();
-        }
       },
       opacity: _playPauseOpacity(),
       duration: const Duration(milliseconds: 200),
