@@ -15,8 +15,11 @@ class PlayPauseButton extends StatefulWidget {
   /// Defines placeholder widget to show when player is in buffering state.
   final Widget? bufferIndicator;
 
+  ValueChanged<bool> forceHideController;
+
   /// Creates [PlayPauseButton] widget.
   PlayPauseButton({
+    required this.forceHideController,
     this.controller,
     this.bufferIndicator,
   });
@@ -70,6 +73,10 @@ class _PlayPauseButtonState extends State<PlayPauseButton>
       _animController.reverse();
     } else {
       _animController.forward();
+
+      var newValue = _controller.value;
+      newValue.isControlsVisible = false;
+      _controller.updateValue(newValue);
     }
   }
 

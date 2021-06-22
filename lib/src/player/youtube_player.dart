@@ -413,14 +413,12 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
     );
   }
 
+  var forceHideController = false;
+
   Widget _buildCustomPlayPause(){
-    if (widget.playPauseAction == null){
-      return _playPauseView();
-    }else{
-      return AnimatedOpacity(opacity: controller.value.isControlsVisible
-          ? 1
-          : 0, duration: const Duration(milliseconds: 300), child: widget.playPauseAction,);
-    }
+    return AnimatedOpacity(opacity: controller.value.isControlsVisible
+        ? 1
+        : 0, duration: const Duration(milliseconds: 300), child: widget.playPauseAction == null ? _playPauseView() : widget.playPauseAction,);
   }
 
   Widget _playPauseView(){
@@ -428,7 +426,8 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
       children: [
         Positioned(child: widget.closeAction, top: 13, left: 13,),
         Center(
-          child: PlayPauseButton(),
+          child: PlayPauseButton(forceHideController: (value) {
+          },),
         )
       ],
     );

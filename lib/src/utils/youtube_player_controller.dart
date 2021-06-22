@@ -38,7 +38,7 @@ class YoutubePlayerValue {
   final bool isReady;
 
   /// Defines whether or not the controls are visible.
-  final bool isControlsVisible;
+  late bool isControlsVisible;
 
   /// Returns true once the video start playing for the first time.
   final bool hasPlayed;
