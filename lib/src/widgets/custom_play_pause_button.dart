@@ -13,11 +13,15 @@ class CustomPlayPauseButton extends StatefulWidget {
   final YoutubePlayerController? controller;
 
   /// Defines placeholder widget to show when player is in buffering state.
-  Widget? bufferIndicator = Container();
+  final Widget? bufferIndicator;
+
+  ValueChanged<bool> forceHideController;
 
   /// Creates [CustomPlayPauseButton] widget.
   CustomPlayPauseButton({
+    required this.forceHideController,
     this.controller,
+    this.bufferIndicator,
   });
 
   @override
@@ -64,19 +68,49 @@ class _PlayPauseButtonState extends State<CustomPlayPauseButton>
     super.dispose();
   }
 
-  void _playPauseListener() => _controller.value.isPlaying
-      ? _animController.forward()
-      : _animController.reverse();
+  void _playPauseListener() {
+    if (!_controller.value.isPlaying ||
+        _controller.value.playerState == PlayerState.ended) {
+      _animController.reverse();
+    } else {
+      // _animController.forward();
+
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final _playerState = _controller.value.playerState;
     if ((!_controller.flags.autoPlay && _controller.value.isReady) ||
         _playerState == PlayerState.playing ||
-        _playerState == PlayerState.paused) {
-      return _playPauseView(_playerState);
+        _playerState == PlayerState.paused ||
+        _playerState == PlayerState.ended) {
+      return Visibility(
+        visible: _playerState == PlayerState.cued ||
+            !_controller.value.isPlaying ||
+            _controller.value.isControlsVisible,
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(50.0),
+            onTap: () {
+              if (!_controller.value.isPlaying) {
+                _controller.play();
+                widget.forceHideController(false);
+              }
+            },
+            child: AnimatedIcon(
+              icon: AnimatedIcons.play_pause,
+              progress: _animController.view,
+              color: Colors.white,
+              size: 60.0,
+            ),
+          ),
+        ),
+      );
     }
     if (_controller.value.hasError) return const SizedBox();
+
     return widget.bufferIndicator ??
         Container(
           width: 70.0,
@@ -85,28 +119,5 @@ class _PlayPauseButtonState extends State<CustomPlayPauseButton>
             valueColor: AlwaysStoppedAnimation(Colors.white),
           ),
         );
-  }
-
-  Widget _playPauseView(PlayerState _playerState) {
-    return Visibility(
-      visible: _playerState == PlayerState.cued ||
-          !_controller.value.isPlaying ||
-          _controller.value.isControlsVisible,
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(50.0),
-          onTap: () => _controller.value.isPlaying
-              ? _controller.pause()
-              : _controller.play(),
-          child: AnimatedIcon(
-            icon: AnimatedIcons.play_pause,
-            progress: _animController.view,
-            color: Colors.white,
-            size: 60.0,
-          ),
-        ),
-      ),
-    );
   }
 }

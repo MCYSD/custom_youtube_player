@@ -73,7 +73,8 @@ class _PlayPauseButtonState extends State<PlayPauseButton>
         _controller.value.playerState == PlayerState.ended) {
       _animController.reverse();
     } else {
-      _animController.forward();
+      // _animController.forward();
+
     }
   }
 
