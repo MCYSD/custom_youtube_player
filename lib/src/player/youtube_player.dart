@@ -404,18 +404,7 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
             ),
           ],
           if (!controller.flags.hideControls)
-            GestureDetector(
-              child: AspectRatio(
-                aspectRatio: _aspectRatio,
-                child: _buildCustomPlayPause(),
-              ),
-              onTap: (){
-                print("controller touch!");
-                if (controller.value.isPlaying){
-                  controller.pause();
-                }
-              },
-            ),
+            Center(child: _buildCustomPlayPause(),),
           if (controller.value.hasError) errorWidget,
         ],
       ),
@@ -438,7 +427,13 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
     if (forceHideController) {
       return 0;
     }
-    return controller.value.isControlsVisible ? 1 : 0;
+    if (controller.value.isControlsVisible){
+      if (controller.value.isPlaying){
+        controller.pause();
+      }
+      return 1;
+    }
+    return 0;
   }
 
   Widget _playPauseView() {
