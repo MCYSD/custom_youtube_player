@@ -425,8 +425,10 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
 
   double _playPauseOpacity() {
     if (forceHideController) {
+      forceHideController = false;
       return 0;
     }
+    forceHideController = false;
     if (controller.value.isControlsVisible){
       if (controller.value.isPlaying){
         controller.pause();
@@ -452,6 +454,7 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
                 forceHideController = value;
               });
             },
+            controller: controller,
           ),
         )
       ],

@@ -94,10 +94,8 @@ class _PlayPauseButtonState extends State<CustomPlayPauseButton>
           child: InkWell(
             borderRadius: BorderRadius.circular(50.0),
             onTap: () {
-              if (!_controller.value.isPlaying) {
-                _controller.play();
-                widget.forceHideController(false);
-              }
+              _controller.play();
+              widget.forceHideController(true);
             },
             child: AnimatedIcon(
               icon: AnimatedIcons.play_pause,
