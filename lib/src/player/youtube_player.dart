@@ -405,7 +405,10 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
           ],
           if (!controller.flags.hideControls)
             GestureDetector(
-              child: _buildCustomPlayPause(),
+              child: AspectRatio(
+                aspectRatio: _aspectRatio,
+                child: _buildCustomPlayPause(),
+              ),
               onTap: (){
                 print("controller touch!");
                 if (controller.value.isPlaying){
