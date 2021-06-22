@@ -412,11 +412,22 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
   }
 
   var forceHideController = false;
+  var onEnd = true;
 
   Widget _buildCustomPlayPause() {
     return AnimatedOpacity(
       onEnd: (){
+        //onEnd will be trigger 2 times: when this view visible and invisible
         print("AnimatedOpacity onEnd");
+        if (onEnd){
+          onEnd = false;
+          return;
+        }
+        onEnd = true;
+        if (controller.value.isPlaying){
+          print("controller: pause");
+          controller.pause();
+        }
       },
       opacity: _playPauseOpacity(),
       duration: const Duration(milliseconds: 200),
@@ -432,10 +443,6 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
       return 0;
     }
     if (controller.value.isControlsVisible){
-      if (controller.value.isPlaying){
-        print("controller: pause");
-        controller.pause();
-      }
       return 1;
     }
     return 0;
