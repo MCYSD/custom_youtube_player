@@ -94,6 +94,7 @@ class _PlayPauseButtonState extends State<CustomPlayPauseButton>
           child: InkWell(
             borderRadius: BorderRadius.circular(50.0),
             onTap: () {
+              print("controller: play");
               _controller.play();
               widget.forceHideController(true);
             },
