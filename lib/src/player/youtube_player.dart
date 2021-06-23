@@ -146,7 +146,7 @@ class YoutubePlayer extends StatefulWidget {
     required this.btnPlayWidget,
     this.width,
     this.aspectRatio = 16 / 9,
-    this.controlsTimeOut = const Duration(milliseconds: 500),
+    this.controlsTimeOut = const Duration(milliseconds: 2000),
     this.bufferIndicator,
     Color? progressIndicatorColor,
     ProgressBarColors? progressColors,
@@ -417,7 +417,7 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
   Widget _buildCustomPlayPause() {
     return AnimatedOpacity(
       opacity: _playPauseOpacity(),
-      duration: const Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 400),
       child: widget.playPauseAction == null
           ? _playPauseView()
           : widget.playPauseAction,
