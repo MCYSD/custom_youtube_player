@@ -15,11 +15,14 @@ class CustomPlayPauseButton extends StatefulWidget {
   /// Defines placeholder widget to show when player is in buffering state.
   final Widget? bufferIndicator;
 
+  Widget btnPlayWidget;
+
   ValueChanged<bool> forceHideController;
 
   /// Creates [CustomPlayPauseButton] widget.
   CustomPlayPauseButton({
     required this.forceHideController,
+    required this.btnPlayWidget,
     this.controller,
     this.bufferIndicator,
   });
@@ -31,16 +34,10 @@ class CustomPlayPauseButton extends StatefulWidget {
 class _PlayPauseButtonState extends State<CustomPlayPauseButton>
     with TickerProviderStateMixin {
   late YoutubePlayerController _controller;
-  late AnimationController _animController;
 
   @override
   void initState() {
     super.initState();
-    _animController = AnimationController(
-      vsync: this,
-      value: 0,
-      duration: const Duration(milliseconds: 300),
-    );
   }
 
   @override
@@ -57,25 +54,11 @@ class _PlayPauseButtonState extends State<CustomPlayPauseButton>
     } else {
       _controller = controller;
     }
-    _controller.removeListener(_playPauseListener);
-    _controller.addListener(_playPauseListener);
   }
 
   @override
   void dispose() {
-    _controller.removeListener(_playPauseListener);
-    _animController.dispose();
     super.dispose();
-  }
-
-  void _playPauseListener() {
-    if (!_controller.value.isPlaying ||
-        _controller.value.playerState == PlayerState.ended) {
-      _animController.reverse();
-    } else {
-      // _animController.forward();
-
-    }
   }
 
   @override
@@ -92,18 +75,12 @@ class _PlayPauseButtonState extends State<CustomPlayPauseButton>
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(50.0),
             onTap: () {
               print("controller: play");
               _controller.play();
               widget.forceHideController(true);
             },
-            child: AnimatedIcon(
-              icon: AnimatedIcons.play_pause,
-              progress: _animController.view,
-              color: Colors.white,
-              size: 60.0,
-            ),
+            child: widget.btnPlayWidget,
           ),
         ),
       );

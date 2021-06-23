@@ -115,6 +115,8 @@ class YoutubePlayer extends StatefulWidget {
 
   final Widget closeAction;
 
+  final Widget btnPlayWidget;
+
   /// {@template youtube_player_flutter.actionsPadding}
   /// Defines padding for [topActions] and [bottomActions].
   ///
@@ -141,9 +143,10 @@ class YoutubePlayer extends StatefulWidget {
     this.key,
     required this.controller,
     required this.closeAction,
+    required this.btnPlayWidget,
     this.width,
     this.aspectRatio = 16 / 9,
-    this.controlsTimeOut = const Duration(seconds: 3),
+    this.controlsTimeOut = const Duration(milliseconds: 500),
     this.bufferIndicator,
     Color? progressIndicatorColor,
     ProgressBarColors? progressColors,
@@ -249,7 +252,7 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
             errorWidget: Container(
               color: Colors.black87,
               padding:
-                  const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
+              const EdgeInsets.symmetric(horizontal: 40.0, vertical: 20.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -305,7 +308,7 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
           Transform.scale(
             scale: controller.value.isFullScreen
                 ? (1 / _aspectRatio * MediaQuery.of(context).size.width) /
-                    MediaQuery.of(context).size.height
+                MediaQuery.of(context).size.height
                 : 1,
             child: RawYoutubePlayer(
               key: widget.key,
@@ -356,32 +359,32 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
               right: 0,
               child: AnimatedOpacity(
                 opacity: !controller.flags.hideControls &&
-                        controller.value.isControlsVisible
+                    controller.value.isControlsVisible
                     ? 1
                     : 0,
                 duration: const Duration(milliseconds: 300),
                 child: controller.flags.isLive
                     ? LiveBottomBar(liveUIColor: widget.liveUIColor)
                     : Padding(
-                        padding: widget.bottomActions == null
-                            ? const EdgeInsets.all(0.0)
-                            : widget.actionsPadding,
-                        child: Row(
-                          children: widget.bottomActions ??
-                              [
-                                const SizedBox(width: 14.0),
-                                CurrentPosition(),
-                                const SizedBox(width: 8.0),
-                                ProgressBar(
-                                  isExpanded: true,
-                                  colors: widget.progressColors,
-                                ),
-                                RemainingDuration(),
-                                const PlaybackSpeedButton(),
-                                FullScreenButton(),
-                              ],
-                        ),
-                      ),
+                  padding: widget.bottomActions == null
+                      ? const EdgeInsets.all(0.0)
+                      : widget.actionsPadding,
+                  child: Row(
+                    children: widget.bottomActions ??
+                        [
+                          const SizedBox(width: 14.0),
+                          CurrentPosition(),
+                          const SizedBox(width: 8.0),
+                          ProgressBar(
+                            isExpanded: true,
+                            colors: widget.progressColors,
+                          ),
+                          RemainingDuration(),
+                          const PlaybackSpeedButton(),
+                          FullScreenButton(),
+                        ],
+                  ),
+                ),
               ),
             ),
             Positioned(
@@ -390,7 +393,7 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
               right: 0,
               child: AnimatedOpacity(
                 opacity: !controller.flags.hideControls &&
-                        controller.value.isControlsVisible
+                    controller.value.isControlsVisible
                     ? 1
                     : 0,
                 duration: const Duration(milliseconds: 300),
@@ -411,26 +414,10 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
     );
   }
 
-  var forceHideController = false;
-  var onEnd = true;
-
   Widget _buildCustomPlayPause() {
     return AnimatedOpacity(
-      onEnd: (){
-        //onEnd will be trigger 2 times: when this view visible and invisible
-        print("AnimatedOpacity onEnd");
-        if (onEnd){
-          onEnd = false;
-          if (controller.value.isPlaying){
-            print("controller: pause");
-            controller.pause();
-          }
-          return;
-        }
-        onEnd = true;
-      },
       opacity: _playPauseOpacity(),
-      duration: const Duration(milliseconds: 200),
+      duration: const Duration(milliseconds: 100),
       child: widget.playPauseAction == null
           ? _playPauseView()
           : widget.playPauseAction,
@@ -438,11 +425,10 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
   }
 
   double _playPauseOpacity() {
-    if (forceHideController) {
-      forceHideController = false;
-      return 0;
-    }
     if (controller.value.isControlsVisible){
+      if (controller.value.isPlaying){
+        controller.pause();
+      }
       return 1;
     }
     return 0;
@@ -460,11 +446,10 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
           child: CustomPlayPauseButton(
             forceHideController: (value) {
               print("visibility: $value");
-              setState(() {
-                forceHideController = value;
-              });
+              controller.updateValue(controller.value.copyWith(isControlsVisible: false));
             },
             controller: controller,
+            btnPlayWidget: widget.btnPlayWidget,
           ),
         )
       ],
@@ -472,25 +457,25 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
   }
 
   Widget get _thumbnail => Image.network(
-        YoutubePlayer.getThumbnail(
-          videoId: controller.metadata.videoId.isEmpty
-              ? controller.initialVideoId
-              : controller.metadata.videoId,
-        ),
-        fit: BoxFit.cover,
-        loadingBuilder: (_, child, progress) =>
-            progress == null ? child : Container(color: Colors.black),
-        errorBuilder: (context, _, __) => Image.network(
-          YoutubePlayer.getThumbnail(
-            videoId: controller.metadata.videoId.isEmpty
-                ? controller.initialVideoId
-                : controller.metadata.videoId,
-            webp: false,
-          ),
-          fit: BoxFit.cover,
-          loadingBuilder: (_, child, progress) =>
-              progress == null ? child : Container(color: Colors.black),
-          errorBuilder: (context, _, __) => Container(),
-        ),
-      );
+    YoutubePlayer.getThumbnail(
+      videoId: controller.metadata.videoId.isEmpty
+          ? controller.initialVideoId
+          : controller.metadata.videoId,
+    ),
+    fit: BoxFit.cover,
+    loadingBuilder: (_, child, progress) =>
+    progress == null ? child : Container(color: Colors.black),
+    errorBuilder: (context, _, __) => Image.network(
+      YoutubePlayer.getThumbnail(
+        videoId: controller.metadata.videoId.isEmpty
+            ? controller.initialVideoId
+            : controller.metadata.videoId,
+        webp: false,
+      ),
+      fit: BoxFit.cover,
+      loadingBuilder: (_, child, progress) =>
+      progress == null ? child : Container(color: Colors.black),
+      errorBuilder: (context, _, __) => Container(),
+    ),
+  );
 }
